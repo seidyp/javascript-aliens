@@ -2,53 +2,45 @@
 const tableData = data;
 
 // get table references with d3.select()
-const tbody = //YOUR_CODE_HERE;
+const tbody = d3.select("tbody");
 
-// define a function called buildTable that takes an argument called data
-// the job of this function is to parse out the data and create an html table
-//YOUR_CODE_HERE
-  // clear out any existing data in tbody by setting the .html() to an empty string
-  //YOUR_CODE_HERE;
+// parse out data and create html table
+function buildTable(data) {
+  tbody.html("");
+  for (var i = 0; i < data.length; i++) {
+    var record = data[i];
+    // console.log(record);
 
-  // Next, loop forEach() dataRow in the data
-  // and append a row and cells for each value in the row
-  //YOUR_CODE_HERE
-    // .append() a table row "tr" to the tbody
-    const row = //YOUR_CODE_HERE;
+    var row = tbody.append("tr");
+    row.append("td").text(record.datetime);
+    // console.log(record.datetime);
+    row.append("td").text(record.city);
+    row.append("td").text(record.state);
+    row.append("td").text(record.country);
+    row.append("td").text(record.shape);
+    row.append("td").text(record.durationMinutes);
+    row.append("td").text(record.comments);
+  };
+};
 
-    // Loop through forEach val in the Object.values(dataRow)
-    //YOUR_CODE_HERE
-      // append each value as a table cell (td)
-      let cell = //YOUR_CODE_HERE;
-      // set the .text of cell to the val
-      //YOUR_CODE_HERE;
-  
 
 // define a function handleClick() that takes no arguments
 // the job of this function is to 
-//YOUR_CODE_HERE 
+function handleClick() {
 
   // Grab the #datetime value from the filter with d3.select().property()
-  const date = //YOUR_CODE_HERE;
-  // store the tableData into a local variable called filteredData
-  let filteredData = //YOUR_CODE_HERE;
-
-  // Check to see if a date was entered and filter the
-  // data using that date.
-  //YOUR_CODE_HERE
-    // Apply `filter` to the table data to only keep the
-    // rows where the `datetime` value matches the filter value
-    //YOUR_CODE_HERE
   
+  const date = d3.select("#datetime").property("value");
+  // store the tableData into a local variable called filteredData
+  
+  var filteredData = tableData.filter(d => d.datetime === date);
+  console.log(filteredData);
 
-  // Rebuild the table by calling you buildTable() function and passing in your filteredData variable
-  // @NOTE: If no date was entered, then filteredData will
-  // just be the original tableData.
-  //YOUR_CODE_HERE;
-
-
+  buildTable(filteredData);
+};
 // Attach an event to listen for the form button #filter-btn to be clicked, it should call your handleClick function
-//YOUR_CODE_HERE;
+var form = d3.select("#filter-btn");
+form.on("click", handleClick);
 
 // Build the table with your buildTable function when the page loads
-//YOUR_CODE_HERE;
+buildTable(tableData);
