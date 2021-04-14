@@ -29,15 +29,67 @@ function buildTable(data) {
 function handleClick() {
 
   // Grab the #datetime value from the filter with d3.select().property()
+  // passing form inputs to lowercase to match data
   
   const date = d3.select("#datetime").property("value");
-  // store the tableData into a local variable called filteredData
-  
-  var filteredData = tableData.filter(d => d.datetime === date);
-  console.log(filteredData);
+  const city = d3.select("#city").property("value").toLowerCase();
+  const state = d3.select("#state").property("value").toLowerCase();
+  const country = d3.select("#country").property("value").toLowerCase();
 
-  buildTable(filteredData);
+  // store the tableData into a local variable called filteredData
+  // running through multiple else if conditionals to determine which tables to pull in based on filters
+  
+  if (date && city && state && country) {
+    var filteredDataDate = tableData.filter(d => d.datetime === date);
+    var filteredDataCity = filteredDataDate.filter(d => d.city === city);
+    var filteredDataState = filteredDataCity.filter(d => d.state === state);
+    var filteredDataCountry = filteredDataState.filter(d => d.country === country);
+    buildTable(filteredDataCountry);
+  } else if (date && state && country) {
+    var filteredDataDate = tableData.filter(d => d.datetime === date);
+    var filteredDataState = filteredDataDate.filter(d => d.state === state);
+    var filteredDataCountry = filteredDataState.filter(d => d.country === country);
+    buildTable(filteredDataCountry);
+  } else if (city && state && country) {
+    var filteredDataCity = tableData.filter(d => d.city === city);
+    var filteredDataState = filteredDataCity.filter(d => d.state === state);
+    var filteredDataCountry = filteredDataState.filter(d => d.country === country);
+    buildTable(filteredDataCountry);  
+  } else if (date && city && state) {
+    var filteredDataDate = tableData.filter(d => d.datetime === date);
+    var filteredDataCity = filteredDataDate.filter(d => d.city === city);
+    var filteredDataState = filteredDataCity.filter(d => d.state === state);
+    buildTable(filteredDataState);
+  } else if (state && country) {
+    var filteredDataState = tableData.filter(d => d.state === state);
+    var filteredDataCountry = filteredDataState.filter(d => d.country === country);
+    buildTable(filteredDataCountry);
+  } else if (city && state) {
+    var filteredDataCity = tableData.filter(d => d.city === city);
+    var filteredDataState = filteredDataCity.filter(d => d.state === state);
+    buildTable(filteredDataState);
+  } else if (date && city) {
+    var filteredDataDate = tableData.filter(d => d.datetime === date);
+    var filteredDataCity = filteredDataDate.filter(d => d.city === city);
+    buildTable(filteredDataCity);
+  } else if (date) {
+    var filteredDataDate = tableData.filter(d => d.datetime === date);
+    buildTable(filteredDataDate);
+  } else if (city) {
+    var filteredDataCity = tableData.filter(d => d.city === city);
+    buildTable(filteredDataCity);
+  } else if (state) {
+    var filteredDataState = tableData.filter(d => d.state === state);
+    buildTable(filteredDataState);
+  } else if (country) {
+    var filteredDataCountry = tableData.filter(d => d.country === country);
+    buildTable(filteredDataCountry);
+  } else {
+    buildTable(tableData);
+  };
+
 };
+
 // Attach an event to listen for the form button #filter-btn to be clicked, it should call your handleClick function
 var form = d3.select("#filter-btn");
 form.on("click", handleClick);
